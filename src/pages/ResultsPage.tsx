@@ -52,7 +52,7 @@ export function ResultsPage() {
             </Link>
             <SecondaryButton
               onClick={() =>
-                navigator.clipboard.writeText(`I scored ${attempt.score}% on ${quiz.title} in QuizFlow Pro.`)
+                navigator.clipboard.writeText(`I scored ${attempt.score}% on ${quiz.title} in Abhinay's Kwizify.`)
               }
             >
               <Share2 className="h-4 w-4" />
