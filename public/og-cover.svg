@@ -1,0 +1,29 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#07111F"/>
+  <circle cx="188" cy="112" r="210" fill="#0EA5E9" fill-opacity="0.14"/>
+  <circle cx="1006" cy="532" r="220" fill="#2563EB" fill-opacity="0.18"/>
+  <rect x="84" y="92" width="1032" height="446" rx="42" fill="url(#a)" stroke="rgba(255,255,255,0.08)"/>
+  <rect x="138" y="150" width="70" height="70" rx="22" fill="url(#b)"/>
+  <path d="M157 181L173 197L192 173" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="240" y="183" fill="#F8FBFF" font-size="56" font-family="Arial, sans-serif" font-weight="700">Kwizer</text>
+  <text x="240" y="237" fill="#A7B7D1" font-size="28" font-family="Arial, sans-serif">Timed quizzes, answer review, and score tracking in one clean app.</text>
+  <rect x="138" y="310" width="290" height="118" rx="30" fill="#0F2238"/>
+  <rect x="454" y="310" width="290" height="118" rx="30" fill="#0F2238"/>
+  <rect x="770" y="310" width="290" height="118" rx="30" fill="#0F2238"/>
+  <text x="172" y="356" fill="#A7B7D1" font-size="24" font-family="Arial, sans-serif">Timed quiz flow</text>
+  <text x="172" y="395" fill="#F8FBFF" font-size="34" font-family="Arial, sans-serif" font-weight="700">Question progress</text>
+  <text x="488" y="356" fill="#A7B7D1" font-size="24" font-family="Arial, sans-serif">Review answers</text>
+  <text x="488" y="395" fill="#F8FBFF" font-size="34" font-family="Arial, sans-serif" font-weight="700">Correct vs selected</text>
+  <text x="804" y="356" fill="#A7B7D1" font-size="24" font-family="Arial, sans-serif">History tracking</text>
+  <text x="804" y="395" fill="#F8FBFF" font-size="34" font-family="Arial, sans-serif" font-weight="700">Scores that persist</text>
+  <defs>
+    <linearGradient id="a" x1="84" y1="92" x2="1116" y2="538" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1727"/>
+      <stop offset="1" stop-color="#08101C"/>
+    </linearGradient>
+    <linearGradient id="b" x1="138" y1="150" x2="208" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+  </defs>
+</svg>

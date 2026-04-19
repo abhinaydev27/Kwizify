@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kwizer Redirect</title>
+    <script>
+      sessionStorage.setItem("kwizer-pages-redirect", window.location.pathname + window.location.search + window.location.hash);
+      window.location.replace("/Kwizify/");
+    </script>
+  </head>
+  <body></body>
+  </html>

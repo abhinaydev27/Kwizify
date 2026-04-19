@@ -7,13 +7,14 @@ import { useApp } from "@/context/AppContext";
 export function QuizPage() {
   const { quizId } = useParams();
   const navigate = useNavigate();
-  const { quizzes, saveAttempt } = useApp();
+  const { quizzes, saveAttempt, sessionUser } = useApp();
   const quiz = quizzes.find((item) => item.id === quizId);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number | null>>({});
   const [reviewFlags, setReviewFlags] = useState<Record<string, boolean>>({});
   const [secondsRemaining, setSecondsRemaining] = useState((quiz?.durationMinutes ?? 1) * 60);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     if (!quiz) {
@@ -43,6 +44,7 @@ export function QuizPage() {
   }
 
   const activeQuiz = quiz;
+  const progressStorageKey = sessionUser ? `kwizer-quiz-progress:${sessionUser.id}:${activeQuiz.id}` : null;
   const currentQuestion = activeQuiz.questions[currentIndex];
 
   if (!currentQuestion) {
@@ -69,6 +71,10 @@ export function QuizPage() {
       answers
     });
 
+    if (progressStorageKey) {
+      window.localStorage.removeItem(progressStorageKey);
+    }
+
     navigate(`/results/${attemptId}`);
   }
 
@@ -77,6 +83,53 @@ export function QuizPage() {
       submitQuiz();
     }
   }, [secondsRemaining]);
+
+  useEffect(() => {
+    if (!progressStorageKey) {
+      setHydrated(true);
+      return;
+    }
+
+    const raw = window.localStorage.getItem(progressStorageKey);
+    if (!raw) {
+      setHydrated(true);
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as {
+        currentIndex: number;
+        selectedAnswers: Record<string, number | null>;
+        reviewFlags: Record<string, boolean>;
+        secondsRemaining: number;
+      };
+
+      setCurrentIndex(Math.min(Math.max(parsed.currentIndex, 0), activeQuiz.questions.length - 1));
+      setSelectedAnswers(parsed.selectedAnswers ?? {});
+      setReviewFlags(parsed.reviewFlags ?? {});
+      setSecondsRemaining(parsed.secondsRemaining ?? activeQuiz.durationMinutes * 60);
+    } catch {
+      window.localStorage.removeItem(progressStorageKey);
+    } finally {
+      setHydrated(true);
+    }
+  }, [activeQuiz.durationMinutes, activeQuiz.id, activeQuiz.questions.length, progressStorageKey]);
+
+  useEffect(() => {
+    if (!hydrated || !progressStorageKey) {
+      return;
+    }
+
+    window.localStorage.setItem(
+      progressStorageKey,
+      JSON.stringify({
+        currentIndex,
+        selectedAnswers,
+        reviewFlags,
+        secondsRemaining
+      })
+    );
+  }, [currentIndex, hydrated, progressStorageKey, reviewFlags, secondsRemaining, selectedAnswers]);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-5 py-8 lg:px-8">
