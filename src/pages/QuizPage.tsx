@@ -129,10 +129,10 @@ export function QuizPage() {
               return (
                 <button
                   key={option}
-                  className={`rounded-2xl border px-4 py-4 text-left transition ${
+                  className={`quiz-option rounded-2xl border px-4 py-4 text-left transition ${
                     isActive
-                      ? "border-cyan-400 bg-cyan-400/12 text-white"
-                      : "border-white/10 bg-white/5 text-[var(--muted)] hover:bg-white/8 hover:text-white"
+                      ? "quiz-option-active"
+                      : "border-white/10 bg-white/5 text-[var(--muted)] hover:bg-white/8 hover:text-[var(--text)]"
                   }`}
                   onClick={() =>
                     setSelectedAnswers((current) => ({

@@ -72,7 +72,11 @@ export function LoginPage() {
       </div>
 
       <div className="order-1 lg:order-2">
-        <img src="/auth-illustration.svg" alt="Authentication illustration" className="mx-auto w-full max-w-xl" />
+        <img
+          src={`${import.meta.env.BASE_URL}auth-illustration.svg`}
+          alt="Authentication illustration"
+          className="mx-auto w-full max-w-xl"
+        />
       </div>
     </div>
   );

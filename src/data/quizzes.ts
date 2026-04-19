@@ -17,7 +17,7 @@ export const quizzes: Quiz[] = [
         options: ["grid-template-columns", "position", "display: flex", "float"],
         correctAnswer: 2,
         explanation: "Flexbox is designed for one-dimensional layouts and alignment.",
-        image: "/question-ui.svg"
+        image: `${import.meta.env.BASE_URL}question-ui.svg`
       },
       {
         id: "ff-2",

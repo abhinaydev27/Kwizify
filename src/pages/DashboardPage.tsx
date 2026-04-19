@@ -73,7 +73,7 @@ export function DashboardPage() {
               <p className="text-sm text-[var(--muted)]">Complete one short quiz to keep your streak alive.</p>
             </div>
           </div>
-          <img src="/empty-state.svg" alt="Progress illustration" className="w-full" />
+          <img src={`${import.meta.env.BASE_URL}empty-state.svg`} alt="Progress illustration" className="w-full" />
         </GlassCard>
       </section>
 

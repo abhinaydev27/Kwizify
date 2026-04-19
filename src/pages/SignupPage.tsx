@@ -74,7 +74,11 @@ export function SignupPage() {
         </p>
       </GlassCard>
 
-      <img src="/auth-illustration.svg" alt="Signup illustration" className="mx-auto w-full max-w-xl" />
+      <img
+        src={`${import.meta.env.BASE_URL}auth-illustration.svg`}
+        alt="Signup illustration"
+        className="mx-auto w-full max-w-xl"
+      />
     </div>
   );
 }

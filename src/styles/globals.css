@@ -112,3 +112,15 @@ select:focus {
 .text-input::placeholder {
   color: var(--muted);
 }
+
+.quiz-option-active {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.14);
+  color: #082f49;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.08);
+}
+
+:root:not([data-theme="light"]) .quiz-option-active {
+  background: rgba(34, 211, 238, 0.18);
+  color: #f8fbff;
+}
