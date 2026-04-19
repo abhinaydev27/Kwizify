@@ -5,7 +5,7 @@
   <rect x="84" y="92" width="1032" height="446" rx="42" fill="url(#a)" stroke="rgba(255,255,255,0.08)"/>
   <rect x="138" y="150" width="70" height="70" rx="22" fill="url(#b)"/>
   <path d="M157 181L173 197L192 173" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="240" y="183" fill="#F8FBFF" font-size="56" font-family="Arial, sans-serif" font-weight="700">Kwizer</text>
+  <text x="240" y="183" fill="#F8FBFF" font-size="56" font-family="Arial, sans-serif" font-weight="700">Kwizify</text>
   <text x="240" y="237" fill="#A7B7D1" font-size="28" font-family="Arial, sans-serif">Timed quizzes, answer review, and score tracking in one clean app.</text>
   <rect x="138" y="310" width="290" height="118" rx="30" fill="#0F2238"/>
   <rect x="454" y="310" width="290" height="118" rx="30" fill="#0F2238"/>

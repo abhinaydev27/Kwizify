@@ -42,7 +42,7 @@ export function AppShell({
               <GraduationCap className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium text-[var(--muted)]">Kwizer</p>
+              <p className="text-sm font-medium text-[var(--muted)]">Kwizify</p>
               <p className="text-base font-semibold">Modern quiz platform</p>
             </div>
           </Link>

@@ -44,7 +44,7 @@ export function QuizPage() {
   }
 
   const activeQuiz = quiz;
-  const progressStorageKey = sessionUser ? `kwizer-quiz-progress:${sessionUser.id}:${activeQuiz.id}` : null;
+  const progressStorageKey = sessionUser ? `kwizify-quiz-progress:${sessionUser.id}:${activeQuiz.id}` : null;
   const currentQuestion = activeQuiz.questions[currentIndex];
 
   if (!currentQuestion) {

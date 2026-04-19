@@ -1,4 +1,4 @@
-# Kwizer
+# Kwizify
 
 A polished quiz website starter built with React, Vite, TypeScript, and Tailwind CSS. It includes:
 
