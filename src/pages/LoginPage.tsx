@@ -5,7 +5,7 @@ import { GlassCard, PrimaryButton, SecondaryButton, TextInput } from "@/componen
 import { useApp } from "@/context/AppContext";
 
 export function LoginPage() {
-  const { login } = useApp();
+  const { login, loginDemo } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState("demo@quizflow.app");
@@ -24,6 +24,15 @@ export function LoginPage() {
     navigate(from);
   }
 
+  function handleDemoLogin() {
+    const result = loginDemo();
+    if (!result.ok) {
+      setError(result.message ?? "Unable to login with the demo account.");
+      return;
+    }
+    navigate(from);
+  }
+
   return (
     <div className="mx-auto grid min-h-[calc(100vh-89px)] max-w-6xl items-center gap-8 px-5 py-10 lg:grid-cols-2 lg:px-8">
       <div className="order-2 lg:order-1">
@@ -31,7 +40,7 @@ export function LoginPage() {
           <div className="mb-8 space-y-3">
             <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">Welcome back</p>
             <h1 className="text-3xl font-semibold">Login to continue your quiz journey</h1>
-            <p className="text-[var(--muted)]">Use the included demo account or create your own account in seconds.</p>
+            <p className="text-[var(--muted)]">Use demo login or create your own account in seconds.</p>
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -47,6 +56,9 @@ export function LoginPage() {
             <PrimaryButton className="w-full justify-center" type="submit">
               Login
             </PrimaryButton>
+            <SecondaryButton className="w-full justify-center" type="button" onClick={handleDemoLogin}>
+              Continue with demo
+            </SecondaryButton>
           </form>
 
           <div className="my-6 grid gap-3 sm:grid-cols-2">
@@ -68,6 +80,9 @@ export function LoginPage() {
               Create account
             </Link>
           </div>
+          <p className="mt-5 text-sm text-[var(--muted)]">
+            Data is stored locally on this device. Clearing browser storage resets accounts and quiz history.
+          </p>
         </GlassCard>
       </div>
 

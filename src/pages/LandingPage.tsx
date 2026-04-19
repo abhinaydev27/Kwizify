@@ -1,13 +1,21 @@
 import { ArrowRight, Clock3, LayoutList, Trophy } from "lucide-react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { GlassCard, PrimaryButton, SecondaryButton } from "@/components/UI";
 import { useApp } from "@/context/AppContext";
 
 export function LandingPage() {
-  const { quizzes, sessionUser } = useApp();
+  const { quizzes, sessionUser, loginDemo } = useApp();
+  const navigate = useNavigate();
 
   if (sessionUser) {
     return <Navigate to="/dashboard" replace />;
+  }
+
+  function handleDemoLogin() {
+    const result = loginDemo();
+    if (result.ok) {
+      navigate("/dashboard");
+    }
   }
 
   return (
@@ -20,7 +28,7 @@ export function LandingPage() {
               Start a quiz, track your score, and move on.
             </h1>
             <p className="max-w-2xl text-base leading-7 text-[var(--muted)]">
-              This version keeps the homepage simple. Login, use the demo account, or create a user and go straight to the dashboard.
+              This version keeps the homepage simple. Login, use demo login, or create a user and go straight to the dashboard.
             </p>
           </div>
 
@@ -34,6 +42,7 @@ export function LandingPage() {
             <Link to="/signup">
               <SecondaryButton>Create account</SecondaryButton>
             </Link>
+            <SecondaryButton onClick={handleDemoLogin}>Demo login</SecondaryButton>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
@@ -58,19 +67,21 @@ export function LandingPage() {
         <GlassCard className="space-y-5">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-300">Demo Access</p>
-            <h2 className="mt-2 text-2xl font-semibold">Use this account right away</h2>
+            <h2 className="mt-2 text-2xl font-semibold">Use demo mode right away</h2>
           </div>
 
           <div className="space-y-3 rounded-3xl border border-white/10 bg-white/6 p-5">
-            <div>
-              <p className="text-sm text-[var(--muted)]">Email</p>
-              <p className="font-semibold">demo@quizflow.app</p>
-            </div>
-            <div>
-              <p className="text-sm text-[var(--muted)]">Password</p>
-              <p className="font-semibold">Password123</p>
-            </div>
+            <p className="text-sm text-[var(--muted)]">
+              Demo mode signs you in instantly on this browser without exposing a password in the UI.
+            </p>
+            <SecondaryButton className="justify-center" onClick={handleDemoLogin}>
+              Open demo dashboard
+            </SecondaryButton>
           </div>
+
+          <p className="text-sm text-[var(--muted)]">
+            Data is stored locally on this device. Clearing browser storage resets demo progress and saved history.
+          </p>
 
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-300">Available Quizzes</p>

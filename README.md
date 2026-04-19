@@ -9,11 +9,6 @@ A polished quiz website starter built with React, Vite, TypeScript, and Tailwind
 - Results page with chart and answer review
 - Profile/settings with theme toggle and password update
 
-## Demo account
-
-- Email: `demo@quizflow.app`
-- Password: `Password123`
-
 ## Run locally
 
 ```bash
@@ -46,3 +41,4 @@ public/
 
 - User accounts, session state, preferences, and quiz history are stored in `localStorage`.
 - This keeps the app fully functional without needing a separate backend for the starter version.
+- Use the in-app `Demo login` action instead of shared credentials.

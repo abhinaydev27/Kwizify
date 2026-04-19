@@ -15,6 +15,7 @@ type AppContextValue = {
   sessionUser: User | null;
   quizzes: typeof quizzes;
   login: (email: string, password: string) => { ok: boolean; message?: string };
+  loginDemo: () => { ok: boolean; message?: string };
   register: (payload: RegisterPayload) => { ok: boolean; message?: string };
   logout: () => void;
   requestPasswordReset: (email: string) => { ok: boolean; message: string };
@@ -50,6 +51,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           return { ok: false, message: "Invalid email or password." };
         }
         setState((current) => ({ ...current, sessionUserId: user.id }));
+        return { ok: true };
+      },
+      loginDemo() {
+        const demoUser = state.users.find((item) => item.id === "demo-user");
+        if (!demoUser) {
+          return { ok: false, message: "Demo account is unavailable." };
+        }
+        setState((current) => ({ ...current, sessionUserId: demoUser.id }));
         return { ok: true };
       },
       register(payload) {
