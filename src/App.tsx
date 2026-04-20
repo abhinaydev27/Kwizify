@@ -8,6 +8,7 @@ import { DashboardPage } from "@/pages/DashboardPage";
 import { QuizPage } from "@/pages/QuizPage";
 import { ResultsPage } from "@/pages/ResultsPage";
 import { ProfilePage } from "@/pages/ProfilePage";
+import { CreateQuizPage } from "@/pages/CreateQuizPage";
 import { AppShell } from "@/components/AppShell";
 import { useApp } from "@/context/AppContext";
 
@@ -96,6 +97,16 @@ export default function App() {
             <ProtectedRoute>
               <AppShell variant="app">
                 <ProfilePage />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-quiz"
+          element={
+            <ProtectedRoute>
+              <AppShell variant="app">
+                <CreateQuizPage />
               </AppShell>
             </ProtectedRoute>
           }

@@ -18,6 +18,7 @@ export type Quiz = {
   icon: string;
   accent: string;
   description: string;
+  createdByUserId?: string;
   questions: Question[];
 };
 
@@ -53,4 +54,5 @@ export type AppState = {
   users: User[];
   sessionUserId: string | null;
   attempts: QuizAttempt[];
+  customQuizzes: Quiz[];
 };

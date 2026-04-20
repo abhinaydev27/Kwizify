@@ -17,7 +17,8 @@ const starterUser: User = {
 const starterState: AppState = {
   users: [starterUser],
   sessionUserId: null,
-  attempts: []
+  attempts: [],
+  customQuizzes: []
 };
 
 export function loadState(): AppState {
@@ -35,6 +36,7 @@ export function loadState(): AppState {
     const parsed = JSON.parse(raw) as AppState;
     return {
       ...parsed,
+      customQuizzes: parsed.customQuizzes ?? [],
       users: parsed.users.map((user) =>
         user.id === "demo-user"
           ? {

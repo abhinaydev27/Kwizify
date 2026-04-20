@@ -8,7 +8,7 @@ export const quizzes: Quiz[] = [
     difficulty: "Beginner",
     durationMinutes: 8,
     icon: "Code2",
-    accent: "from-cyan-400 to-blue-500",
+    accent: "quiz-accent-development",
     description: "Brush up on HTML, CSS, and responsive design fundamentals.",
     questions: [
       {
@@ -42,7 +42,7 @@ export const quizzes: Quiz[] = [
     difficulty: "Intermediate",
     durationMinutes: 10,
     icon: "Sparkles",
-    accent: "from-fuchsia-500 to-rose-500",
+    accent: "quiz-accent-product",
     description: "Validate how well you understand prioritization and customer value.",
     questions: [
       {
@@ -75,7 +75,7 @@ export const quizzes: Quiz[] = [
     difficulty: "Advanced",
     durationMinutes: 12,
     icon: "BarChart3",
-    accent: "from-amber-400 to-orange-500",
+    accent: "quiz-accent-analytics",
     description: "Interpret charts, trends, and performance metrics with confidence.",
     questions: [
       {

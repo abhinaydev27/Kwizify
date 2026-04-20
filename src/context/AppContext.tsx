@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import type { AppState, QuizAttempt, User } from "@/types";
-import { quizzes } from "@/data/quizzes";
+import type { AppState, Quiz, QuizAttempt, User } from "@/types";
+import { quizzes as starterQuizzes } from "@/data/quizzes";
 import { loadState, makeId, saveState } from "@/lib/storage";
 
 type RegisterPayload = {
@@ -13,13 +13,14 @@ type AppContextValue = {
   users: User[];
   attempts: QuizAttempt[];
   sessionUser: User | null;
-  quizzes: typeof quizzes;
+  quizzes: Quiz[];
   login: (email: string, password: string) => { ok: boolean; message?: string };
   loginDemo: () => { ok: boolean; message?: string };
   register: (payload: RegisterPayload) => { ok: boolean; message?: string };
   logout: () => void;
   requestPasswordReset: (email: string) => { ok: boolean; message: string };
   saveAttempt: (attempt: Omit<QuizAttempt, "id" | "userId" | "completedAt">) => string;
+  createQuiz: (quiz: Omit<Quiz, "id" | "icon" | "createdByUserId">) => string;
   updatePreferences: (updates: Partial<User["preferences"]>) => void;
   changePassword: (currentPassword: string, nextPassword: string) => { ok: boolean; message: string };
 };
@@ -39,12 +40,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.dataset.theme = sessionUser?.preferences.darkMode ? "dark" : "light";
   }, [sessionUser?.preferences.darkMode]);
 
+  const allQuizzes = useMemo(() => [...starterQuizzes, ...state.customQuizzes], [state.customQuizzes]);
+
   const value = useMemo<AppContextValue>(
     () => ({
       users: state.users,
       attempts: state.attempts,
       sessionUser,
-      quizzes,
+      quizzes: allQuizzes,
       login(email, password) {
         const user = state.users.find((item) => item.email.toLowerCase() === email.toLowerCase());
         if (!user || user.password !== password) {
@@ -120,6 +123,30 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
         return id;
       },
+      createQuiz(quiz) {
+        if (!sessionUser) {
+          return "";
+        }
+
+        const id = makeId("quiz");
+        const nextQuiz: Quiz = {
+          ...quiz,
+          id,
+          icon: "Sparkles",
+          createdByUserId: sessionUser.id,
+          questions: quiz.questions.map((question, index) => ({
+            ...question,
+            id: makeId(`question-${index + 1}`)
+          }))
+        };
+
+        setState((current) => ({
+          ...current,
+          customQuizzes: [nextQuiz, ...current.customQuizzes]
+        }));
+
+        return id;
+      },
       updatePreferences(updates) {
         if (!sessionUser) {
           return;
@@ -155,7 +182,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         return { ok: true, message: "Password updated." };
       }
     }),
-    [sessionUser, state]
+    [allQuizzes, sessionUser, state]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

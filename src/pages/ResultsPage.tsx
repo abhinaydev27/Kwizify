@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { Share2 } from "lucide-react";
 import { Link, Navigate, useParams } from "react-router-dom";
@@ -8,6 +8,7 @@ import { useApp } from "@/context/AppContext";
 export function ResultsPage() {
   const { attemptId } = useParams();
   const { attempts, quizzes, sessionUser } = useApp();
+  const [shareMessage, setShareMessage] = useState("");
   const attempt = attempts.find((item) => item.id === attemptId && item.userId === sessionUser?.id);
   const quiz = quizzes.find((item) => item.id === attempt?.quizId);
 
@@ -23,6 +24,30 @@ export function ResultsPage() {
 
   if (!attempt || !quiz) {
     return <Navigate to="/dashboard" replace />;
+  }
+
+  async function handleShareResult() {
+    const safeAttempt = attempt!;
+    const safeQuiz = quiz!;
+    const shareUrl = `${window.location.origin}${import.meta.env.BASE_URL}results/${safeAttempt.id}`;
+    const shareText = `I scored ${safeAttempt.score}% on ${safeQuiz.title} in Kwizify.`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: `${safeQuiz.title} result · Kwizify`,
+          text: shareText,
+          url: shareUrl
+        });
+        setShareMessage("Result shared.");
+        return;
+      }
+
+      await navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
+      setShareMessage("Result link copied.");
+    } catch {
+      setShareMessage("Share did not complete.");
+    }
   }
 
   return (
@@ -50,15 +75,12 @@ export function ResultsPage() {
             <Link to={`/quiz/${quiz.id}`}>
               <PrimaryButton>Retake quiz</PrimaryButton>
             </Link>
-            <SecondaryButton
-              onClick={() =>
-                navigator.clipboard.writeText(`I scored ${attempt.score}% on ${quiz.title} in Kwizify.`)
-              }
-            >
+            <SecondaryButton onClick={handleShareResult}>
               <Share2 className="h-4 w-4" />
               Share result
             </SecondaryButton>
           </div>
+          {shareMessage ? <p className="text-sm text-emerald-300">{shareMessage}</p> : null}
         </GlassCard>
 
         <GlassCard className="space-y-4">

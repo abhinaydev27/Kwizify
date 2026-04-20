@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { BarChart3, Flame, Search, Trophy } from "lucide-react";
+import { BarChart3, Flame, PlusSquare, Search, Share2, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 import { GlassCard, PrimaryButton, SectionHeading } from "@/components/UI";
 import { useApp } from "@/context/AppContext";
@@ -7,6 +7,7 @@ import { useApp } from "@/context/AppContext";
 export function DashboardPage() {
   const { sessionUser, quizzes, attempts, users } = useApp();
   const [query, setQuery] = useState("");
+  const [shareMessage, setShareMessage] = useState("");
 
   const myAttempts = attempts.filter((attempt) => attempt.userId === sessionUser?.id);
   const filteredQuizzes = useMemo(
@@ -81,24 +82,34 @@ export function DashboardPage() {
         <SectionHeading
           eyebrow="Quiz Library"
           title="Search categories and jump into a session"
-          body="This starter version includes three polished quiz sets with different categories and difficulty levels."
+          body="Starter and custom quizzes live in one library, so you can build your own topics and launch them immediately."
         />
 
-        <label className="flex items-center gap-3 rounded-3xl border border-white/10 bg-white/5 px-5 py-4">
-          <Search className="h-5 w-5 text-[var(--muted)]" />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search quiz title, category, or difficulty"
-            className="w-full bg-transparent outline-none placeholder:text-[var(--muted)]"
-          />
-        </label>
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="flex min-w-[18rem] flex-1 items-center gap-3 rounded-3xl border border-white/10 bg-white/5 px-5 py-4">
+            <Search className="h-5 w-5 text-[var(--muted)]" />
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search quiz title, category, or difficulty"
+              className="w-full bg-transparent outline-none placeholder:text-[var(--muted)]"
+            />
+          </label>
+          <Link to="/create-quiz">
+            <PrimaryButton>
+              <PlusSquare className="h-4 w-4" />
+              Create quiz
+            </PrimaryButton>
+          </Link>
+        </div>
+
+        {shareMessage ? <p className="text-sm text-emerald-300">{shareMessage}</p> : null}
 
         <div className="grid gap-5 lg:grid-cols-3">
           {filteredQuizzes.map((quiz) => (
-            <GlassCard key={quiz.id} className="space-y-5">
-              <div className={`rounded-3xl bg-gradient-to-r ${quiz.accent} p-5 text-white`}>
-                <p className="text-sm opacity-80">{quiz.category}</p>
+            <GlassCard key={quiz.id} className="quiz-library-card space-y-5">
+              <div className={`quiz-library-banner ${quiz.accent}`}>
+                <p className="text-sm font-medium text-white/72">{quiz.category}</p>
                 <h3 className="mt-2 text-2xl font-semibold">{quiz.title}</h3>
               </div>
               <p className="text-[var(--muted)]">{quiz.description}</p>
@@ -106,9 +117,38 @@ export function DashboardPage() {
                 <span>{quiz.difficulty}</span>
                 <span>{quiz.durationMinutes} min</span>
               </div>
-              <Link to={`/quiz/${quiz.id}`}>
-                <PrimaryButton className="w-full justify-center">Start quiz</PrimaryButton>
-              </Link>
+              <div className="flex gap-3">
+                <Link to={`/quiz/${quiz.id}`} className="flex-1">
+                  <PrimaryButton className="quiz-library-button w-full justify-center">Start quiz</PrimaryButton>
+                </Link>
+                <button
+                  type="button"
+                  className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--muted)] transition hover:bg-white/10 hover:text-[var(--text)]"
+                  aria-label={`Share ${quiz.title}`}
+                  onClick={async () => {
+                    const shareUrl = `${window.location.origin}${import.meta.env.BASE_URL}quiz/${quiz.id}`;
+                    const shareData = {
+                      title: `${quiz.title} · Kwizify`,
+                      text: `Try this ${quiz.difficulty.toLowerCase()} ${quiz.category.toLowerCase()} quiz on Kwizify.`,
+                      url: shareUrl
+                    };
+
+                    try {
+                      if (navigator.share) {
+                        await navigator.share(shareData);
+                        setShareMessage(`Shared ${quiz.title}.`);
+                      } else {
+                        await navigator.clipboard.writeText(`${shareData.text} ${shareUrl}`);
+                        setShareMessage(`Copied share link for ${quiz.title}.`);
+                      }
+                    } catch {
+                      setShareMessage("Share did not complete.");
+                    }
+                  }}
+                >
+                  <Share2 className="h-4 w-4" />
+                </button>
+              </div>
             </GlassCard>
           ))}
         </div>

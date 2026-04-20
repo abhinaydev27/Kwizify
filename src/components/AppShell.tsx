@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { GraduationCap, LayoutDashboard, LogOut, Menu, UserCircle2 } from "lucide-react";
+import { GraduationCap, LayoutDashboard, LogOut, Menu, PlusSquare, UserCircle2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import clsx from "clsx";
 import { useApp } from "@/context/AppContext";
@@ -23,6 +23,7 @@ export function AppShell({
       variant === "app"
         ? [
             { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+            { to: "/create-quiz", label: "Create Quiz", icon: PlusSquare },
             { to: "/profile", label: "Profile", icon: UserCircle2 }
           ]
         : [
