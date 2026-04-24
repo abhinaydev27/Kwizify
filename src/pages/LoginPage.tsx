@@ -1,98 +1,102 @@
-import { useState } from "react";
-import { Github, Mail } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { GlassCard, PrimaryButton, SecondaryButton, TextInput } from "@/components/UI";
 import { useApp } from "@/context/AppContext";
 
 export function LoginPage() {
-  const { login, loginDemo } = useApp();
+  const { login, register } = useApp();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [email, setEmail] = useState("demo@quizflow.app");
-  const [password, setPassword] = useState("Password123");
-  const [error, setError] = useState("");
+  const [mode, setMode] = useState<"login" | "register">("login");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
-  const from = (location.state as { from?: string } | null)?.from ?? "/dashboard";
-
-  function handleSubmit(event: React.FormEvent) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const result = login(email, password);
-    if (!result.ok) {
-      setError(result.message ?? "Unable to login.");
-      return;
-    }
-    navigate(from);
-  }
+    setMessage("");
 
-  function handleDemoLogin() {
-    const result = loginDemo();
-    if (!result.ok) {
-      setError(result.message ?? "Unable to login with the demo account.");
+    if (!email.trim() || !password.trim()) {
+      setMessage("Email and password are required.");
       return;
     }
-    navigate(from);
+
+    if (mode === "register") {
+      if (!name.trim()) {
+        setMessage("Name is required.");
+        return;
+      }
+
+      const result = register({
+        name: name.trim(),
+        email: email.trim(),
+        password: password.trim()
+      });
+
+      if (!result.ok) {
+        setMessage(result.message ?? "Could not create account.");
+        return;
+      }
+
+      navigate("/dashboard");
+      return;
+    }
+
+    const result = login(email.trim(), password.trim());
+    if (!result.ok) {
+      setMessage(result.message ?? "Could not login.");
+      return;
+    }
+
+    navigate("/dashboard");
   }
 
   return (
-    <div className="mx-auto grid min-h-[calc(100vh-89px)] max-w-6xl items-center gap-8 px-5 py-10 lg:grid-cols-2 lg:px-8">
-      <div className="order-2 lg:order-1">
-        <GlassCard className="mx-auto max-w-xl">
-          <div className="mb-8 space-y-3">
-            <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">Welcome back</p>
-            <h1 className="text-3xl font-semibold">Login to continue your quiz journey</h1>
-            <p className="text-[var(--muted)]">Use demo login or create your own account in seconds.</p>
-          </div>
-
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <TextInput label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            <TextInput
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            {error ? <p className="text-sm text-rose-400">{error}</p> : null}
-            <PrimaryButton className="w-full justify-center" type="submit">
-              Login
-            </PrimaryButton>
-            <SecondaryButton className="w-full justify-center" type="button" onClick={handleDemoLogin}>
-              Continue with demo
-            </SecondaryButton>
-          </form>
-
-          <div className="my-6 grid gap-3 sm:grid-cols-2">
-            <SecondaryButton className="justify-center">
-              <Mail className="h-4 w-4" />
-              Google
-            </SecondaryButton>
-            <SecondaryButton className="justify-center">
-              <Github className="h-4 w-4" />
-              GitHub
-            </SecondaryButton>
-          </div>
-
-          <div className="flex items-center justify-between text-sm text-[var(--muted)]">
-            <Link to="/forgot-password" className="hover:text-white">
-              Forgot password?
-            </Link>
-            <Link to="/signup" className="hover:text-white">
-              Create account
-            </Link>
-          </div>
-          <p className="mt-5 text-sm text-[var(--muted)]">
-            Data is stored locally on this device. Clearing browser storage resets accounts and quiz history.
+    <div className="mx-auto flex min-h-[calc(100vh-72px)] max-w-3xl items-center px-5 py-10">
+      <GlassCard className="w-full">
+        <div className="space-y-3">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">Simple Login App</p>
+          <h1 className="text-3xl font-semibold">{mode === "login" ? "Login" : "Create account"}</h1>
+          <p className="text-[var(--muted)]">
+            This project stores user data in localStorage, so it works like a simple browser database.
           </p>
-        </GlassCard>
-      </div>
+        </div>
 
-      <div className="order-1 lg:order-2">
-        <img
-          src={`${import.meta.env.BASE_URL}auth-illustration.svg`}
-          alt="Authentication illustration"
-          className="mx-auto w-full max-w-xl"
-        />
-      </div>
+        <div className="mt-6 flex gap-3">
+          <SecondaryButton type="button" className="justify-center" onClick={() => setMode("login")}>
+            Login mode
+          </SecondaryButton>
+          <SecondaryButton type="button" className="justify-center" onClick={() => setMode("register")}>
+            Register mode
+          </SecondaryButton>
+        </div>
+
+        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+          {mode === "register" ? (
+            <TextInput label="Name" value={name} onChange={(event) => setName(event.target.value)} />
+          ) : null}
+          <TextInput label="Email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+          <TextInput
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+
+          {message ? <p className="text-sm text-rose-400">{message}</p> : null}
+
+          <PrimaryButton className="w-full justify-center" type="submit">
+            {mode === "login" ? "Login" : "Create account"}
+          </PrimaryButton>
+        </form>
+
+        <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-[var(--muted)]">
+          <p>How it works:</p>
+          <p>1. Register a user.</p>
+          <p>2. Data is saved in browser localStorage.</p>
+          <p>3. Login checks email and password from that saved data.</p>
+        </div>
+      </GlassCard>
     </div>
   );
 }

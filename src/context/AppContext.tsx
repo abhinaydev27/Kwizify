@@ -57,12 +57,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         return { ok: true };
       },
       loginDemo() {
-        const demoUser = state.users.find((item) => item.id === "demo-user");
-        if (!demoUser) {
-          return { ok: false, message: "Demo account is unavailable." };
-        }
-        setState((current) => ({ ...current, sessionUserId: demoUser.id }));
-        return { ok: true };
+        return { ok: false, message: "Demo login is removed in the simple version." };
       },
       register(payload) {
         const existing = state.users.find((item) => item.email.toLowerCase() === payload.email.toLowerCase());
@@ -97,12 +92,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       logout() {
         setState((current) => ({ ...current, sessionUserId: null }));
       },
-      requestPasswordReset(email) {
-        const user = state.users.find((item) => item.email.toLowerCase() === email.toLowerCase());
-        if (!user) {
-          return { ok: false, message: "No account found for that email." };
-        }
-        return { ok: true, message: "Reset link simulated. Use your existing password for this demo." };
+      requestPasswordReset() {
+        return { ok: false, message: "Forgot password is not used in the simple version." };
       },
       saveAttempt(attempt) {
         if (!sessionUser) {

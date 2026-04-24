@@ -1,21 +1,9 @@
-import type { AppState, User } from "@/types";
+import type { AppState } from "@/types";
 
-const STORAGE_KEY = "quizflow-pro-state";
-
-const starterUser: User = {
-  id: "demo-user",
-  name: "Welcome Back User",
-  email: "demo@quizflow.app",
-  password: "Password123",
-  avatar: "WU",
-  preferences: {
-    darkMode: false,
-    preferredCategory: "All"
-  }
-};
+export const STORAGE_KEY = "simple-login-app-state";
 
 const starterState: AppState = {
-  users: [starterUser],
+  users: [],
   sessionUserId: null,
   attempts: [],
   customQuizzes: []
@@ -36,16 +24,10 @@ export function loadState(): AppState {
     const parsed = JSON.parse(raw) as AppState;
     return {
       ...parsed,
+      users: parsed.users ?? [],
+      attempts: parsed.attempts ?? [],
       customQuizzes: parsed.customQuizzes ?? [],
-      users: parsed.users.map((user) =>
-        user.id === "demo-user"
-          ? {
-              ...user,
-              name: user.name === "Ava Carter" ? starterUser.name : user.name,
-              avatar: user.avatar === "AC" ? starterUser.avatar : user.avatar
-            }
-          : user
-      )
+      sessionUserId: parsed.sessionUserId ?? null
     };
   } catch {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(starterState));
